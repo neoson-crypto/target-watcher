@@ -16,7 +16,7 @@ const bot = new TelegramBot(telegramBotKey);
 
     poolContract.events.Swap()
         .on("connected", function (subscriptionId) {
-            console.log(`connected: ${subscriptionId}`);
+            console.log(`swap connected: ${subscriptionId}`);
         })
         .on('data', function ({returnValues, transactionHash}) {
             if (Number(returnValues.amount0Out) > 0) {
@@ -41,6 +41,40 @@ const bot = new TelegramBot(telegramBotKey);
 
                     bot.sendMessage(chatId, msg, {disable_web_page_preview: true, parse_mode: 'HTML'});
                 }
+            }
+        })
+        .on('error', console.error);
+
+    poolContract.events.Mint()
+        .on("connected", function (subscriptionId) {
+            console.log(`mint connected: ${subscriptionId}`);
+        })
+        .on('data', function ({returnValues, transactionHash}) {
+            if (Number(returnValues.amount0) >= web3.utils.toWei(threshold)) {
+                // added more than 1 eth liquidity
+                const msg = `我草！大户竟然进二池当矿！\n`
+                    + `+<code>${Number(web3.utils.fromWei(returnValues.amount0)).toFixed(6)}</code> ETH\n`
+                    + `+<code>${Number(web3.utils.fromWei(returnValues.amount1)).toFixed(6)}</code> NYAN\n`
+                    + `链接: <a href="https://arbiscan.io/tx/${transactionHash}">link</a>`;
+
+                bot.sendMessage(chatId, msg, {disable_web_page_preview: true, parse_mode: 'HTML'});
+            }
+        })
+        .on('error', console.error);
+
+    poolContract.events.Burn()
+        .on("connected", function (subscriptionId) {
+            console.log(`burn connected: ${subscriptionId}`);
+        })
+        .on('data', function ({returnValues, transactionHash}) {
+            if (Number(returnValues.amount0) >= web3.utils.toWei(threshold)) {
+                // removed more than 1 eth liquidity
+                const msg = `溜了溜了！大户从二池逃出来了！\n`
+                    + `+<code>${Number(web3.utils.fromWei(returnValues.amount0)).toFixed(6)}</code> ETH\n`
+                    + `+<code>${Number(web3.utils.fromWei(returnValues.amount1)).toFixed(6)}</code> NYAN\n`
+                    + `链接: <a href="https://arbiscan.io/tx/${transactionHash}">link</a>`;
+
+                bot.sendMessage(chatId, msg, {disable_web_page_preview: true, parse_mode: 'HTML'});
             }
         })
         .on('error', console.error);
