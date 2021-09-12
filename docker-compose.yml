@@ -1,0 +1,19 @@
+version: "3.5"
+
+services:
+  target-watcher:
+    image: target-watcher/target-watcher:latest
+    restart: always
+    build:
+      context: ../target-watcher
+      dockerfile: ../target-watcher/docker/Dockerfile
+    container_name: target-watcher
+    volumes:
+      - ../target-watcher:/var/www/html:delegated
+    networks:
+      targetwatcher:
+
+networks:
+  targetwatcher:
+    driver: bridge
+    name: targetwatcher
