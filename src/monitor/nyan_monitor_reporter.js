@@ -3,16 +3,16 @@ const Web3 = require('web3');
 const cron = require('node-cron');
 const BN = require("bn.js");
 const TelegramBot = require("node-telegram-bot-api");
-const UniswapV2ABI = require("../abi/uniswapv2ABI.json");
-const StakeABI = require("../abi/stakeABI.json");
-const targets = require('./targets.json');
+const UniswapV2ABI = require("../../abi/uniswapv2ABI.json");
+const StakeABI = require("../../abi/stakeABI.json");
+const targets = require('../targets.json');
 
 const web3 = new Web3('https://arb1.arbitrum.io/rpc');
 const ethStakeAddr = '0x9f7968de728ac7a6769141f63dca03fd8b03a76f';
 const nyanStakeAddr = '0x32e5594f14de658b0d577d6560fa0d9c6f1aa724';
 const sushiRouter = '0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506';
 const telegramBotKey = process.env.BOT_KEY;
-const chatId = process.env.NYAN_BABA_CHANNEL;
+const chatId = process.env.MONITOR_REPORTER_CHANNEL;
 
 const bot = new TelegramBot(telegramBotKey);
 const sushiRouterContract = new web3.eth.Contract(UniswapV2ABI, sushiRouter);
