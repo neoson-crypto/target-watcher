@@ -1,3 +1,4 @@
+require('dotenv').config();
 const Web3 = require('web3');
 const ERC20ABI = require('../abi/erc20.json');
 const TelegramBot = require("node-telegram-bot-api");
