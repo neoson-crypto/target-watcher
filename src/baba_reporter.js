@@ -23,11 +23,15 @@ cron.schedule('*/10 * * * *', async () => {
     for (const target of targets) {
         const ethBalance = await ethContract.methods.earned(target.address).call();
 
-        const nyanContract = new web3.eth.Contract(abi, nyanStakeAddr);
+        const nyanContract = new web3.eth.Contract(StakeABI, nyanStakeAddr);
         const stakedBalance = await nyanContract.methods.balanceOf(target.address).call();
         const earnedBalance = await nyanContract.methods.earned(target.address).call();
 
         const total = new BN(ethBalance).add(new BN(stakedBalance)).add(new BN(earnedBalance));
+
+        if (Number(total.toString()) <= 0) {
+            continue;
+        }
 
         const out = await sushiRouterContract.methods.getAmountsOut(total, ['0xed3fb761414da74b74f33e5c5a1f78104b188dfc', '0x82af49447d8a07e3bd95bd0d56f35241523fbab1']).call();
 
