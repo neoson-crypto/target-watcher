@@ -12,7 +12,7 @@ const sushiRouter = '0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506';
 const threshold = '1'; // eth
 const telegramBotKey = process.env.BOT_KEY;
 const chatId = process.env.CARBON_TRADE_CHANNEL;
-const babaChatId = process.env.NYAN_BABA_CHANNEL;
+const babaChatId = process.env.MONITOR_REPORTER_CHANNEL;
 const ethStakeAddr = '0x27F0408729dCC6A4672e1062f5003D2a07E4E10D';
 const nyanStakeAddr = '0x2C5058325373d02Dfd6c08E48d91FcAf8fD49f45';
 

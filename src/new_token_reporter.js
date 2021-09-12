@@ -32,7 +32,7 @@ const bot = new TelegramBot(telegramBotKey);
                                     // erc20, report it
                                     const msg = `新币来啦 小心冲哦\n`
                                         + `被rug是哭都没泪 💸\n\n`
-                                        + `代币: $<code>${name}</code>(<code>${symbol}</code>)\n`
+                                        + `代币: <code>${name}</code> (<code>${symbol}</code>)\n`
                                         + `合约地址: <code>${contractAddress}</code>\n`
                                         + `合约创作者: <code>${transaction.from}</code>\n`
                                         + `链接: <a href="https://arbiscan.io/address/${contractAddress}">link</a>`;
