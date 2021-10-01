@@ -13,6 +13,8 @@ const chatId = process.env.TIMELOCK_MONITOR_CHANNEL;
 const bot = new TelegramBot(telegramBotKey);
 const timelockContract = new web3.eth.Contract(TimelockABI, timelockAddr);
 
+const projetName = 'MAGIC';
+
 (async () => {
     timelockContract.events.QueueTransaction()
         .on("connected", function (subscriptionId) {
@@ -21,19 +23,19 @@ const timelockContract = new web3.eth.Contract(TimelockABI, timelockAddr);
         .on('data', function ({returnValues, transactionHash}) {
             const method = returnValues.signature.split('(')[0].trim();
             const targetMethodAbi = MasterChefABI.find(x => x.name === method);
-            const decoded = web3.eth.abi.decodeParameter(targetMethodAbi.inputs, returnValues.data);
+            const decoded = web3.eth.abi.decodeParameters(targetMethodAbi.inputs, returnValues.data);
 
-            let msg = `Queued transaction: \n`
-                + `target: ${returnValues.target}\n`
-                + `method: ${method}\n`
+            let msg = `${projetName} queued transaction \n`
+                + `target: <pre>${returnValues.target}</pre>\n`
+                + `method: <pre>${method}</pre>\n\n`
                 + `Input data:\n`;
 
             for (let i = 0; i < decoded.__length__; i++) {
-                msg += `${targetMethodAbi.inputs[i].name}: ${decoded[i]}\n`;
+                msg += `<pre>${targetMethodAbi.inputs[i].name}: ${decoded[i]}</pre>\n`;
             }
 
-            msg += `eth send: ${returnValues.value}\n`
-                + `expected run on: ${moment(returnValues.eta).format('YYYY-MM-DD HH:mm:ss')}\n`
+            msg += `\neth send: <pre>${returnValues.value}</pre>\n`
+                + `expected run on: <pre>${moment.unix(Number(returnValues.eta)).format('YYYY-MM-DD HH:mm:ss')}</pre>\n`
                 + `<a href="https://arbiscan.io/tx/${transactionHash}">link</a>`;
 
             bot.sendMessage(chatId, msg, {disable_web_page_preview: true, parse_mode: 'HTML'});
@@ -47,10 +49,10 @@ const timelockContract = new web3.eth.Contract(TimelockABI, timelockAddr);
         .on('data', async function ({returnValues, transactionHash, blockNumber}) {
             const blockData = await web3.eth.getBlock(blockNumber);
 
-            const msg = `Executed transaction: \n`
-                + `target: ${returnValues.target}\n`
-                + `method: ${returnValues.signature}\n`
-                + `executed on: ${moment(blockData.timestamp).format('YYYY-MM-DD HH:mm:ss')}\n`
+            const msg = `${projetName} executed transaction: \n`
+                + `target: <pre>${returnValues.target}</pre>\n`
+                + `method: <pre>${returnValues.signature}</pre>\n`
+                + `executed on: <pre>${moment.unix(Number(blockData.timestamp)).format('YYYY-MM-DD HH:mm:ss')}</pre>\n`
                 + `<a href="https://arbiscan.io/tx/${transactionHash}">link</a>`;
 
             bot.sendMessage(chatId, msg, {disable_web_page_preview: true, parse_mode: 'HTML'});

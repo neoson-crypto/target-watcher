@@ -8,6 +8,6 @@
     "moment": "^2.29.1",
     "node-cron": "^3.0.0",
     "node-telegram-bot-api": "^0.53.0",
-    "web3": "^1.3.6"
+    "web3": "^1.5.3"
   }
 }
